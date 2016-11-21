@@ -28,8 +28,8 @@ var createSongRow = function(songNumber, songName, songLength) {
         } else if (currentlyPlayingSongNumber === songNumber) {
             $(this).html(playButtonTemplate);
             $('.main-controls .play-pause').html(playerBarPlayButton);
-           currentlyPlayingSongNumber = null;
-           currentSongFromAlbum = null;
+//            currentlyPlayingSongNumber = null;
+//            currentSongFromAlbum = null;
         }
 
         
