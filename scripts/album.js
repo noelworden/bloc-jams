@@ -33,7 +33,7 @@ var createSongRow = function(songNumber, songName, songLength) {
       '<tr class="album-view-song-item">'
     + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
     + '  <td class="song-item-title">' + songName + '</td>'
-    + '  <td class="song-item-duration">' + songLength + '</td>'
+    + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
     + '</tr>'
     ;
     
@@ -118,6 +118,28 @@ var setCurrentAlbum = function(album) {
     }
 };
 
+var setCurrentTimeInPlayerBar = function() {
+    var currentTime = currentSoundFile.getTime();
+    $('.currently-playing .current-time').text(filterTimeCode(currentTime));
+};
+
+var setTotalTimeInPlayerBar = function() {
+//    $('.currently-playing .total-time').text('totalTime');
+    var duration = currentSongFromAlbum.duration
+    $('.currently-playing .total-time').text(filterTimeCode(duration));
+};
+
+var filterTimeCode = function(timeInSeconds){
+//    timeInSeconds = currentSongFromAlbum.duration
+    var exactSeconds = parseFloat(timeInSeconds);
+    var wholeSeconds = Math.floor(exactSeconds);
+    var minutes = Math.floor(wholeSeconds / 60);
+    
+    var secondsLeft = wholeSeconds % 60
+    
+    return minutes + ":" + ("0" + secondsLeft).slice(-2);
+    
+}
 var updateSeekBarWhileSongPlays = function() {
     if (currentSoundFile) {
         currentSoundFile.bind('timeupdate', function(event){
@@ -125,6 +147,7 @@ var updateSeekBarWhileSongPlays = function() {
             var $seekBar = $('.seek-control .seek-bar')
             
             updateSeekPercentage($seekBar, seekBarFillRatio);
+            setCurrentTimeInPlayerBar();
         });
     }
 };
@@ -186,6 +209,8 @@ var updatePlayerBarSong = function() {
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
+//    filterTimeCode(setTotalTimeInPlayerBar()); this doesnt work but it works in the song listing
+    setTotalTimeInPlayerBar();
 };
 
 var trackIndex = function(album, song) {
